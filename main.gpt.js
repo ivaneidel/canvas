@@ -105,33 +105,35 @@ window.addEventListener("keydown", (e) => {
   if (e.key === "ArrowRight") angle += 0.1;
 });
 
-// Check for DeviceMotionEvent support
-if (window.DeviceMotionEvent) {
-  // Request permission for iOS 13+ and Android Chrome (if required)
-  if (typeof DeviceMotionEvent.requestPermission === "function") {
-    DeviceMotionEvent.requestPermission()
-      .then((permissionState) => {
-        if (permissionState === "granted") {
-          window.addEventListener("devicemotion", handleMotion);
-        } else {
-          console.log("Permission denied");
-        }
-      })
-      .catch(console.error);
+setTimeout(() => {
+  // Check for DeviceMotionEvent support
+  if (window.DeviceMotionEvent) {
+    // Request permission for iOS 13+ and Android Chrome (if required)
+    if (typeof DeviceMotionEvent.requestPermission === "function") {
+      DeviceMotionEvent.requestPermission()
+        .then((permissionState) => {
+          if (permissionState === "granted") {
+            window.addEventListener("devicemotion", handleMotion);
+          } else {
+            console.log("Permission denied");
+          }
+        })
+        .catch(console.error);
+    } else {
+      // For browsers that don't require permission
+      window.addEventListener("devicemotion", handleMotion);
+    }
   } else {
-    // For browsers that don't require permission
-    window.addEventListener("devicemotion", handleMotion);
+    console.log("DeviceMotionEvent is not supported on this device.");
   }
-} else {
-  console.log("DeviceMotionEvent is not supported on this device.");
-}
 
-const handleMotion = (event) => {
-  const span = document.createElement("span");
-  span.innerHTML = `${event.x} - ${event.y} - ${event.z}`;
-  document.body.appendChild(span);
-  angle = event.x;
-};
+  const handleMotion = (event) => {
+    const span = document.createElement("span");
+    span.innerHTML = `${event.x} - ${event.y} - ${event.z}`;
+    document.body.appendChild(span);
+    angle = event.x;
+  };
+}, 100);
 
 // Start the animation
 update();
