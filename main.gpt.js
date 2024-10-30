@@ -135,12 +135,25 @@ window.addEventListener("keydown", (e) => {
 //   };
 // }, 100);
 
-const acl = new Accelerometer({ frequency: 60 });
-acl.addEventListener("reading", () => {
-  angle = acl.x;
-});
+if ("Gyroscope" in window) {
+  const gyro = new Gyroscope({ frequency: 60 });
 
-acl.start();
+  gyro.addEventListener("reading", () => {
+    angle = gyro.y;
+  });
+
+  gyro.addEventListener("error", (event) => {
+    if (event.error.name === "NotAllowedError") {
+      console.log("Permission to access sensor was denied.");
+    } else if (event.error.name === "NotReadableError") {
+      console.log("Cannot connect to the sensor.");
+    }
+  });
+
+  gyro.start();
+} else {
+  console.log("Gyroscope is not supported on this device.");
+}
 
 // Start the animation
 update();
