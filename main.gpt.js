@@ -139,7 +139,7 @@ if ("Gyroscope" in window) {
   const gyro = new Gyroscope({ frequency: 60 });
 
   gyro.addEventListener("reading", () => {
-    angle = gyro.z * (Math.PI / 180);
+    angle = gyro.y * (Math.PI / 180);
   });
 
   gyro.addEventListener("error", (event) => {
