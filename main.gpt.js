@@ -105,35 +105,42 @@ window.addEventListener("keydown", (e) => {
   if (e.key === "ArrowRight") angle += 0.1;
 });
 
-setTimeout(() => {
-  // Check for DeviceMotionEvent support
-  if (window.DeviceMotionEvent) {
-    // Request permission for iOS 13+ and Android Chrome (if required)
-    if (typeof DeviceMotionEvent.requestPermission === "function") {
-      DeviceMotionEvent.requestPermission()
-        .then((permissionState) => {
-          if (permissionState === "granted") {
-            window.addEventListener("devicemotion", handleMotion);
-          } else {
-            console.log("Permission denied");
-          }
-        })
-        .catch(console.error);
-    } else {
-      // For browsers that don't require permission
-      window.addEventListener("devicemotion", handleMotion);
-    }
-  } else {
-    console.log("DeviceMotionEvent is not supported on this device.");
-  }
+// setTimeout(() => {
+//   // Check for DeviceMotionEvent support
+//   if (window.DeviceMotionEvent) {
+//     // Request permission for iOS 13+ and Android Chrome (if required)
+//     if (typeof DeviceMotionEvent.requestPermission === "function") {
+//       DeviceMotionEvent.requestPermission()
+//         .then((permissionState) => {
+//           if (permissionState === "granted") {
+//             window.addEventListener("devicemotion", handleMotion);
+//           } else {
+//             console.log("Permission denied");
+//           }
+//         })
+//         .catch(console.error);
+//     } else {
+//       // For browsers that don't require permission
+//       window.addEventListener("devicemotion", handleMotion);
+//     }
+//   } else {
+//     console.log("DeviceMotionEvent is not supported on this device.");
+//   }
 
-  const handleMotion = (event) => {
-    const span = document.createElement("span");
-    span.innerHTML = `${event.x} - ${event.y} - ${event.z}`;
-    document.body.appendChild(span);
-    angle = event.x;
-  };
-}, 100);
+//   const handleMotion = (event) => {
+//     const span = document.createElement("span");
+//     span.innerHTML = `${event.x} - ${event.y} - ${event.z}`;
+//     document.body.appendChild(span);
+//     angle = event.x;
+//   };
+// }, 100);
+
+const acl = new Accelerometer({ frequency: 60 });
+acl.addEventListener("reading", () => {
+  angle = acl.x;
+});
+
+acl.start();
 
 // Start the animation
 update();
